@@ -2,7 +2,9 @@
 
 A parametric **double / twin radiator pipe clip** for OpenSCAD: a back plate with two snap-on C-clips that hold the supply and return pipes of a radiator at a fixed distance from the wall. Optional **stackable spacers** move the clip further out from the wall.
 
-> ⚠️ **Not test-printed yet.** The dimensions are derived from the parameters below, but the parts have not been printed and fitted. Print one clip first and check the snap fit before printing a batch.
+> ✅ **Fit check OK (18 mm twin clip, default parameters).** Jonas test-printed the standard 18 mm clip and it holds on the pipes. The 15 mm and 22 mm clips and the spacers have not been test-printed yet.
+
+![18 mm twin clip mounted on radiator pipes](docs/twin_pipe_clip_18mm_mounted.jpg)
 
 ## Previews
 
@@ -53,6 +55,51 @@ Spacers have locating pegs at fixed positions, so they fit every clip size and s
 ### Standard copper pipe sizes
 
 Copper pipe (EN 1057) is commonly 10, 12, 15, 18, 22 and 28 mm outer diameter. Set `pipe_d1` / `pipe_d2` to the measured outer diameter of your pipes.
+
+## Wall cover plate
+
+A parametric **wall cover plate (escutcheon)** for where the two radiator pipes come out of the wall: [`src/wall_cover.scad`](src/wall_cover.scad). It is made of **two identical halves**, split through the pipe centres, joined by a dovetail in the seam that slides together along the pipes. Nothing bends, so it is PETG-safe. Print the halves flat, front side up, without supports. Mount it with double-sided tape (flat back, default) or with countersunk wood screws.
+
+> ✅ **Fit check OK.** Jonas test-printed the cover plate (18 mm pipes, c/c 40 mm, width 40 mm) and it fits.
+
+![Wall cover plate mounted around the radiator pipes](docs/wall_cover_mounted.jpg)
+
+### Cover plate STL files (18 mm pipes, c/c 40 mm, width 40 mm)
+
+`half` = one half (print 2), `print` = both halves laid out together on the bed.
+
+| File | Thickness | Mounting | Part |
+|---|---|---|---|
+| [wall_cover_18mm_w40_t3_tape_half.stl](stl/wall_cover_18mm_w40_t3_tape_half.stl) | 3 mm | Tape | One half |
+| [wall_cover_18mm_w40_t3_tape_print.stl](stl/wall_cover_18mm_w40_t3_tape_print.stl) | 3 mm | Tape | Both halves |
+| [wall_cover_18mm_w40_t3_screws_half.stl](stl/wall_cover_18mm_w40_t3_screws_half.stl) | 3 mm | Screws | One half |
+| [wall_cover_18mm_w40_t3_screws_print.stl](stl/wall_cover_18mm_w40_t3_screws_print.stl) | 3 mm | Screws | Both halves |
+| [wall_cover_18mm_w40_t5_tape_half.stl](stl/wall_cover_18mm_w40_t5_tape_half.stl) | 5 mm | Tape | One half |
+| [wall_cover_18mm_w40_t5_tape_print.stl](stl/wall_cover_18mm_w40_t5_tape_print.stl) | 5 mm | Tape | Both halves |
+| [wall_cover_18mm_w40_t5_screws_half.stl](stl/wall_cover_18mm_w40_t5_screws_half.stl) | 5 mm | Screws | One half |
+| [wall_cover_18mm_w40_t5_screws_print.stl](stl/wall_cover_18mm_w40_t5_screws_print.stl) | 5 mm | Screws | Both halves |
+
+### Cover plate parameters
+
+| Parameter | Default | Meaning |
+|---|---|---|
+| `part` | `"half"` | `"half"`, `"print"` (both halves), `"assembled"`, `"exploded"` |
+| `pipe_preset` / `pipe_d_custom` | `18` / `0` | Pipe diameter: 15, 18 or 22 mm (custom value > 0 overrides) |
+| `pipe_clearance` | `0.8` | Extra hole diameter around the pipe (mm) |
+| `cc` | `40` | Pipe centre-to-centre distance (same as the clip) |
+| `width_preset` / `width_custom` | `40` / `0` | Plate width across the pipes: 40, 50 or 60 mm |
+| `height_custom` | `0` | Plate height; default is `cc + width` |
+| `thick_preset` / `thick_custom` | `3` / `0` | Plate thickness: 3 or 5 mm |
+| `screw_holes` | `false` | `false` = double-sided tape (flat back), `true` = countersunk screw holes |
+| `screw_size` | `"ws3.0"` | Wood screw with countersunk head: `ws3.0` = Ø3.3 mm hole, Ø6 mm countersink (also `ws3.5`, `ws4.0`, `M2.5`, `M3.5`) |
+| `screw_hole_d_custom` / `screw_head_d_custom` | `0` | Override hole / countersink diameter |
+| `waist_notch` | `3` | V-notch at the waist between the pipes (0 = straight) |
+| `dt_neck`, `dt_head`, `dt_depth`, `dt_tol` | `3`, `5.5`, `3`, `0.15` | Dovetail joint dimensions and clearance |
+
+```sh
+# 5 mm cover with screw holes, both halves on the bed
+openscad -o cover.stl -D thick_preset=5 -D screw_holes=true -D 'part="print"' src/wall_cover.scad
+```
 
 ## Customizing in OpenSCAD
 
